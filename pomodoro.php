@@ -78,6 +78,14 @@ class MoCache_Translation {
 			if ( $this->busted ) {
 				file_put_contents( $cache_file, sprintf( '<?php $_mtime = %d; $_cache = %s;', $mtime, var_export( $_this->cache, true ) ), LOCK_EX );
 			}
+			
+			/**
+		        * opcache_invalidate
+		        */
+		        if ( function_exists('opcache_is_script_cached') && opcache_is_script_cached( $cache_file ) )
+		        {
+			   opcache_invalidate( $cache_file, true );
+		        }
 		} );
 	}
 
